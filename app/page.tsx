@@ -5,12 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 
+type Result = {
+  pickup: number;
+  base: number;
+  subtotal: number;
+  up: number;
+  campaign: number;
+  final: number;
+};
+
 export default function KaitoriCalculator() {
   const [finalAmount, setFinalAmount] = useState("");
   const [pickupCost, setPickupCost] = useState("");
   const [campaign, setCampaign] = useState("");
   const [rate, setRate] = useState(1.2);
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState<Result | null>(null);
 
   const calculate = () => {
     const f = Number(finalAmount) || 0;
@@ -31,9 +40,9 @@ export default function KaitoriCalculator() {
     });
   };
 
-  const addCampaign = (amount) => {
+  const addCampaign = (amount: number) => {
     const current = Number(campaign) || 0;
-    setCampaign(current + amount);
+    setCampaign(String(current + amount));
   };
 
   const reset = () => {
@@ -94,7 +103,6 @@ export default function KaitoriCalculator() {
                 placeholder="1000"
               />
 
-              {/* ワンタップボタン（キャンペーン直下に配置） */}
               <div className="flex gap-2">
                 <Button className="flex-1" variant="secondary" onClick={() => addCampaign(1000)}>
                   +1000
@@ -108,7 +116,6 @@ export default function KaitoriCalculator() {
               </div>
             </div>
 
-            {/* 固定ボタン風 */}
             <div className="flex gap-2">
               <Button className="flex-1 text-lg py-4" onClick={calculate}>
                 計算
@@ -132,7 +139,7 @@ export default function KaitoriCalculator() {
                 <p className="font-bold text-lg">・最終お渡し額：{result.final.toLocaleString()} 円</p>
               </motion.div>
             )}
-                      <p className="text-xs text-center text-gray-500 mt-4">不具合や要望があれば仙台支店津川までご連絡ください。</p>
+            <p className="text-xs text-center text-gray-500 mt-4">不具合や要望があれば仙台支店津川までご連絡ください。</p>
           </CardContent>
         </Card>
       </div>
