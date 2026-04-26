@@ -1,65 +1,141 @@
-import Image from "next/image";
+"use client";
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { motion } from "framer-motion";
 
-export default function Home() {
+export default function KaitoriCalculator() {
+  const [finalAmount, setFinalAmount] = useState("");
+  const [pickupCost, setPickupCost] = useState("");
+  const [campaign, setCampaign] = useState("");
+  const [rate, setRate] = useState(1.2);
+  const [result, setResult] = useState(null);
+
+  const calculate = () => {
+    const f = Number(finalAmount) || 0;
+    const p = Number(pickupCost) || 0;
+    const c = Number(campaign) || 0;
+
+    const base = (f + p - c) / rate;
+    const subtotal = base - p;
+    const upAmount = base * (rate - 1);
+
+    setResult({
+      pickup: p,
+      base: Math.round(base),
+      subtotal: Math.round(subtotal),
+      up: Math.round(upAmount),
+      campaign: c,
+      final: f,
+    });
+  };
+
+  const addCampaign = (amount) => {
+    const current = Number(campaign) || 0;
+    setCampaign(current + amount);
+  };
+
+  const reset = () => {
+    setFinalAmount("");
+    setPickupCost("");
+    setCampaign("");
+    setResult(null);
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="min-h-screen bg-gray-100 p-3">
+      <div className="max-w-md mx-auto">
+        <Card className="rounded-2xl shadow-lg">
+          <CardContent className="p-4 space-y-4">
+            <h1 className="text-lg font-bold text-center">TSO明細書用計算アプリ</h1>
+
+            <div className="space-y-1">
+              <label className="text-sm">アップ率</label>
+              <select
+                className="w-full border rounded p-3 text-base"
+                value={rate}
+                onChange={(e) => setRate(Number(e.target.value))}
+              >
+                <option value={1.2}>20%アップ</option>
+                <option value={1.22}>22%アップ</option>
+              </select>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-sm">最終お渡し金額</label>
+              <Input
+                inputMode="numeric"
+                className="text-lg p-3"
+                value={finalAmount}
+                onChange={(e) => setFinalAmount(e.target.value)}
+                placeholder="30000"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-sm">有料回収金額</label>
+              <Input
+                inputMode="numeric"
+                className="text-lg p-3"
+                value={pickupCost}
+                onChange={(e) => setPickupCost(e.target.value)}
+                placeholder="30000"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-sm">キャンペーン</label>
+              <Input
+                inputMode="numeric"
+                className="text-lg p-3"
+                value={campaign}
+                onChange={(e) => setCampaign(e.target.value)}
+                placeholder="1000"
+              />
+
+              {/* ワンタップボタン（キャンペーン直下に配置） */}
+              <div className="flex gap-2">
+                <Button className="flex-1" variant="secondary" onClick={() => addCampaign(1000)}>
+                  +1000
+                </Button>
+                <Button className="flex-1" variant="secondary" onClick={() => addCampaign(2000)}>
+                  +2000
+                </Button>
+                <Button className="flex-1" variant="secondary" onClick={() => addCampaign(3000)}>
+                  +3000
+                </Button>
+              </div>
+            </div>
+
+            {/* 固定ボタン風 */}
+            <div className="flex gap-2">
+              <Button className="flex-1 text-lg py-4" onClick={calculate}>
+                計算
+              </Button>
+              <Button className="flex-1 text-lg py-4" variant="destructive" onClick={reset}>
+                リセット
+              </Button>
+            </div>
+
+            {result !== null && (
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="text-left mt-4 space-y-2 text-sm"
+              >
+                <p>・有料回収金額：{result.pickup.toLocaleString()} 円</p>
+                <p>・20%アップ前金額：{result.base.toLocaleString()} 円</p>
+                <p>・小計（買取額 − 有料回収）：{result.subtotal.toLocaleString()} 円</p>
+                <p>・アップ分：{result.up.toLocaleString()} 円</p>
+                <p>・キャンペーン：{result.campaign.toLocaleString()} 円</p>
+                <p className="font-bold text-lg">・最終お渡し額：{result.final.toLocaleString()} 円</p>
+              </motion.div>
+            )}
+                      <p className="text-xs text-center text-gray-500 mt-4">不具合や要望があれば仙台支店津川までご連絡ください。</p>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
