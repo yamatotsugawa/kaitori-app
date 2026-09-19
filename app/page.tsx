@@ -107,44 +107,24 @@ export default function KaitoriCalculator() {
 
             <div className="space-y-1">
               <label className="text-sm">有料回収金額</label>
-              <div className="flex gap-2">
-                <Input
-                  inputMode="numeric"
-                  className="text-lg p-3 flex-1"
-                  value={pickupCost}
-                  onChange={(e) => setPickupCost(e.target.value)}
-                  placeholder="30000"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="px-4 text-lg"
-                  onClick={() => toggleSign(pickupCost, setPickupCost)}
-                >
-                  ±
-                </Button>
-              </div>
+              <Input
+                inputMode="numeric"
+                className="text-lg p-3"
+                value={pickupCost}
+                onChange={(e) => setPickupCost(e.target.value)}
+                placeholder="30000"
+              />
             </div>
 
             <div className="space-y-1">
               <label className="text-sm">キャンペーン</label>
-              <div className="flex gap-2">
-                <Input
-                  inputMode="numeric"
-                  className="text-lg p-3 flex-1"
-                  value={campaign}
-                  onChange={(e) => setCampaign(e.target.value)}
-                  placeholder="1000"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="px-4 text-lg"
-                  onClick={() => toggleSign(campaign, setCampaign)}
-                >
-                  ±
-                </Button>
-              </div>
+              <Input
+                inputMode="numeric"
+                className="text-lg p-3"
+                value={campaign}
+                onChange={(e) => setCampaign(e.target.value)}
+                placeholder="1000"
+              />
 
               <div className="flex gap-2">
                 <Button className="flex-1" variant="secondary" onClick={() => addCampaign(1000)}>
