@@ -45,6 +45,19 @@ export default function KaitoriCalculator() {
     setCampaign(String(current + amount));
   };
 
+  // 符号を反転させる汎用関数（例: "30000" <-> "-30000"）
+  const toggleSign = (
+    value: string,
+    setter: (v: string) => void
+  ) => {
+    if (!value) return;
+    if (value.startsWith("-")) {
+      setter(value.slice(1));
+    } else {
+      setter("-" + value);
+    }
+  };
+
   const reset = () => {
     setFinalAmount("");
     setPickupCost("");
@@ -73,35 +86,65 @@ export default function KaitoriCalculator() {
 
             <div className="space-y-1">
               <label className="text-sm">最終お渡し金額</label>
-              <Input
-                inputMode="numeric"
-                className="text-lg p-3"
-                value={finalAmount}
-                onChange={(e) => setFinalAmount(e.target.value)}
-                placeholder="30000"
-              />
+              <div className="flex gap-2">
+                <Input
+                  inputMode="numeric"
+                  className="text-lg p-3 flex-1"
+                  value={finalAmount}
+                  onChange={(e) => setFinalAmount(e.target.value)}
+                  placeholder="30000"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="px-4 text-lg"
+                  onClick={() => toggleSign(finalAmount, setFinalAmount)}
+                >
+                  ±
+                </Button>
+              </div>
             </div>
 
             <div className="space-y-1">
               <label className="text-sm">有料回収金額</label>
-              <Input
-                inputMode="numeric"
-                className="text-lg p-3"
-                value={pickupCost}
-                onChange={(e) => setPickupCost(e.target.value)}
-                placeholder="30000"
-              />
+              <div className="flex gap-2">
+                <Input
+                  inputMode="numeric"
+                  className="text-lg p-3 flex-1"
+                  value={pickupCost}
+                  onChange={(e) => setPickupCost(e.target.value)}
+                  placeholder="30000"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="px-4 text-lg"
+                  onClick={() => toggleSign(pickupCost, setPickupCost)}
+                >
+                  ±
+                </Button>
+              </div>
             </div>
 
             <div className="space-y-1">
               <label className="text-sm">キャンペーン</label>
-              <Input
-                inputMode="numeric"
-                className="text-lg p-3"
-                value={campaign}
-                onChange={(e) => setCampaign(e.target.value)}
-                placeholder="1000"
-              />
+              <div className="flex gap-2">
+                <Input
+                  inputMode="numeric"
+                  className="text-lg p-3 flex-1"
+                  value={campaign}
+                  onChange={(e) => setCampaign(e.target.value)}
+                  placeholder="1000"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="px-4 text-lg"
+                  onClick={() => toggleSign(campaign, setCampaign)}
+                >
+                  ±
+                </Button>
+              </div>
 
               <div className="flex gap-2">
                 <Button className="flex-1" variant="secondary" onClick={() => addCampaign(1000)}>
